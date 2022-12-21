@@ -11,6 +11,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.get
 
 val CHARS = listOf(
     ('A'..'G').toList(),
@@ -22,6 +23,7 @@ val CHARS = listOf(
 class MainActivity : AppCompatActivity() {
 
     lateinit var SELECTED_DRAWABLE: Drawable
+    private lateinit var selected: Button
     val UNSELECTED_DRAWABLE = ColorDrawable(Color.BLACK)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,18 +52,18 @@ class MainActivity : AppCompatActivity() {
             }
             table.addView(row)
         }
+        selected = (table[0] as TableRow)[0] as Button
+        selected.background = SELECTED_DRAWABLE
     }
 
     var rowCounter = 0
-    var itemCounter = 0
-    private var selected: Button? = null
+    var itemCounter = 1
     fun selectNext(view: View) {
-        if (selected != null) {
-            selected!!.background = UNSELECTED_DRAWABLE
-        }
+        selected.background = UNSELECTED_DRAWABLE
+
         selected = findViewById("${rowCounter}${itemCounter}".toInt())
-        val parentRow = selected!!.parent as TableRow
-        selected!!.background = SELECTED_DRAWABLE
+        val parentRow = selected.parent as TableRow
+        selected.background = SELECTED_DRAWABLE
 
         // Wenn letztes Item in Reihe
         if (itemCounter == (parentRow.childCount - 1)) {

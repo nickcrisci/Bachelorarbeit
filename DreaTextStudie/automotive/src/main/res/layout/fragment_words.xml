@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="wordsViewModel"
+            type="com.example.drea_text_studie.ui.studie.WordsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.studie.WordsFragment"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/nextWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nächstes Wort" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{wordsViewModel.currentWord}"
+            android:textSize="48sp"/>
+        <TextView
+            android:id="@+id/textInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="34sp"
+            tools:text="Text Input"/>
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:text="Weiter"
+            android:textColor="#000000"
+            android:textSize="40sp" />
+        <TableLayout
+            android:id="@+id/charTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle|beginning|end" />
+
+    </LinearLayout>
+</layout>

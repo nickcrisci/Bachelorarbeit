@@ -12,11 +12,11 @@ class WordsViewModel : ViewModel() {
 
     private var wordsList: MutableList<String> = mutableListOf()
 
-    fun getNextWord() {
+    fun getNextWord(): Boolean {
         val word = allWordsList.random()
         if (wordsList.contains(word)) {
             if (wordsList.size == allWordsList.size) {
-                return
+                return true
             }
             getNextWord()
         } else {
@@ -24,5 +24,6 @@ class WordsViewModel : ViewModel() {
             Log.i("Study", "Next word shown: \"$word\"")
             wordsList.add(word)
         }
+        return false
     }
 }

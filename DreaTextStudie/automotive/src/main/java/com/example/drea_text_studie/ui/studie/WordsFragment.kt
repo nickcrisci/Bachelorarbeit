@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout.SHOW_DIVIDER_BEGINNING
 import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.appcompat.content.res.AppCompatResources
@@ -21,13 +22,15 @@ import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
 
 val CHARS = listOf(
-    ('A'..'G').toList(),
-    ('H'..'N').toList(),
-    ('O'..'T').toList(),
+    (1..9).plus(0),
+    ('A'..'J').toList(),
+    ('K'..'T').toList(),
     ('U'..'Z').toList()
 )
 
 class WordsFragment : Fragment() {
+
+    private val STUDY_TAG = "Study"
 
     private lateinit var binding: FragmentWordsBinding
     private val viewModel: WordsViewModel by viewModels()
@@ -45,16 +48,14 @@ class WordsFragment : Fragment() {
         SELECTED_DRAWABLE = AppCompatResources.getDrawable(requireContext(), R.drawable.selected)!!
         for (chunk in CHARS) {
             val row = TableRow(context)
-
             for (char in chunk) {
-                Log.i("Nick", char.toString())
                 val button: Button = layoutInflater.inflate(R.layout.char_button, null) as Button
                 with(button) {
                     text = char.toString()
                     id = "${binding.charTable.childCount}${row.childCount}".toInt()
                     setOnClickListener {
                         binding.textInput.append(text)
-                        Log.i("Study", "Button clicked: $text")
+                        Log.i(STUDY_TAG, "Button clicked: $text")
                     }
                 }
                 row.addView(button)
@@ -71,15 +72,29 @@ class WordsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.wordsViewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.nextWord.setOnClickListener {
-            viewModel.getNextWord()
+        with(binding) {
+            wordsViewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+            nextWord.setOnClickListener {
+                viewModel.getNextWord()
+            }
+            btnNext.setOnClickListener {
+                Log.i(STUDY_TAG, "Selected next char")
+                selectNext()
+            }
+            btnDone.setOnClickListener {
+                Log.i(STUDY_TAG, "Word done. Target Word was: ${currentWord.text}, User Input was: ${textInput.text}")
+                textInput.text = ""
+                val done = viewModel.getNextWord()
+                if (done) {
+                    textInput.text = "Du bist fertig!"
+                    Log.i(STUDY_TAG, "Trial is finished")
+                    btnDone.isClickable = false
+                    btnNext.isClickable = false
+                }
+            }
         }
         viewModel.getNextWord()
-        binding.btnNext.setOnClickListener{
-            selectNext()
-        }
     }
 
     var rowCounter = 0

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/wordsFragment4">
+    <fragment
+        android:id="@+id/configFragment"
+        android:name="com.example.drea_text_studie.ui.studie.ConfigFragment"
+        android:label="fragment_config"
+        tools:layout="@layout/fragment_config" >
+        <action
+            android:id="@+id/action_configFragment_to_wordsFragment4"
+            app:destination="@id/wordsFragment4" />
+    </fragment>
+    <fragment
+        android:id="@+id/wordsFragment4"
+        android:name="com.example.drea_text_studie.ui.studie.WordsFragment"
+        android:label="WordsFragment" >
+        <argument
+            android:name="mode"
+            app:argType="boolean" />
+        <argument
+            android:name="sex"
+            app:argType="com.example.drea_text_studie.util.Sex" />
+        <argument
+            android:name="firstname"
+            app:argType="string" />
+        <argument
+            android:name="surname"
+            app:argType="string" />
+        <argument
+            android:name="age"
+            app:argType="integer" />
+    </fragment>
+</navigation>

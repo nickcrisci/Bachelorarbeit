@@ -21,6 +21,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
+import com.example.drea_text_studie.util.charClicked
+import com.example.drea_text_studie.util.selectedChar
+import com.example.drea_text_studie.util.wordDone
 
 val CHARS = listOf(
     (1..9).plus(0),
@@ -57,7 +60,7 @@ class WordsFragment : Fragment() {
                     id = "${binding.charTable.childCount}${row.childCount}".toInt()
                     setOnClickListener {
                         binding.textInput.append(text)
-                        Log.i(STUDY_TAG, "Button clicked: $text")
+                        charClicked(this)
                     }
                 }
                 row.addView(button)
@@ -73,7 +76,6 @@ class WordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("Nick", args.toString())
         with(binding) {
             wordsViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -81,11 +83,11 @@ class WordsFragment : Fragment() {
                 viewModel.getNextWord()
             }
             btnNext.setOnClickListener {
-                Log.i(STUDY_TAG, "Selected next char")
-                selectNext()
+                val _selected = selectNext()
+                selectedChar(_selected)
             }
             btnDone.setOnClickListener {
-                Log.i(STUDY_TAG, "Word done. Target Word was: ${currentWord.text}, User Input was: ${textInput.text}")
+                wordDone(currentWord.text.toString(), textInput.text.toString())
                 textInput.text = ""
                 val done = viewModel.getNextWord()
                 if (done) {
@@ -101,7 +103,7 @@ class WordsFragment : Fragment() {
 
     var rowCounter = 0
     var itemCounter = 1
-    fun selectNext() {
+    fun selectNext(): Button {
         selected.background = UNSELECTED_DRAWABLE
 
         selected = (binding.charTable[rowCounter] as TableRow)[itemCounter] as Button
@@ -124,6 +126,7 @@ class WordsFragment : Fragment() {
             // Sonst nächstes Item
             itemCounter++
         }
+        return selected
     }
 }
 

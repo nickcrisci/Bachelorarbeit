@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.drea_text_studie.util.nextWord
 
 class WordsViewModel : ViewModel() {
 
@@ -21,7 +22,7 @@ class WordsViewModel : ViewModel() {
             getNextWord()
         } else {
             _currentWord.value = word
-            Log.i("Study", "Next word shown: \"$word\"")
+            nextWord(word)
             wordsList.add(word)
         }
         return false

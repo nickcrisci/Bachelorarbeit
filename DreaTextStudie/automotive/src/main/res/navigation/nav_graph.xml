@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/configFragment">
+    app:startDestination="@id/wordsFragment4">
     <fragment
         android:id="@+id/configFragment"
         android:name="com.example.drea_text_studie.ui.studie.ConfigFragment"

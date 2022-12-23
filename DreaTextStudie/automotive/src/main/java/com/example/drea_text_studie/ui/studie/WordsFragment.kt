@@ -18,6 +18,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
 
@@ -31,6 +32,7 @@ val CHARS = listOf(
 class WordsFragment : Fragment() {
 
     private val STUDY_TAG = "Study"
+    private val args: WordsFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentWordsBinding
     private val viewModel: WordsViewModel by viewModels()
@@ -71,7 +73,7 @@ class WordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.i("Nick", args.toString())
         with(binding) {
             wordsViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner

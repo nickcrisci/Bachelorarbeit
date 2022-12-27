@@ -3,7 +3,6 @@ package com.example.drea_text_studie.ui.studie
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout.SHOW_DIVIDER_BEGINNING
-import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
@@ -21,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
+import com.example.drea_text_studie.util.Direction
 import com.example.drea_text_studie.util.charClicked
 import com.example.drea_text_studie.util.selectedChar
 import com.example.drea_text_studie.util.wordDone
@@ -82,9 +80,11 @@ class WordsFragment : Fragment() {
             nextWord.setOnClickListener {
                 viewModel.getNextWord()
             }
+            btnPrevious.setOnClickListener {
+                selectedChar(selectNextChar(Direction.LEFT))
+            }
             btnNext.setOnClickListener {
-                val _selected = selectNext()
-                selectedChar(_selected)
+                selectedChar(selectNextChar(Direction.RIGHT))
             }
             btnDone.setOnClickListener {
                 wordDone(currentWord.text.toString(), textInput.text.toString())
@@ -101,31 +101,12 @@ class WordsFragment : Fragment() {
         viewModel.getNextWord()
     }
 
-    var rowCounter = 0
-    var itemCounter = 1
-    fun selectNext(): Button {
+    private fun selectNextChar(direction: Direction): Button {
         selected.background = UNSELECTED_DRAWABLE
+        val indicies = viewModel.selectNext(direction)
 
-        selected = (binding.charTable[rowCounter] as TableRow)[itemCounter] as Button
-        val parentRow = selected.parent as TableRow
+        selected = (binding.charTable[indicies[0]] as TableRow)[indicies[1]] as Button
         selected.background = SELECTED_DRAWABLE
-
-        // Wenn letztes Item in Reihe
-        if (itemCounter == (parentRow.childCount - 1)) {
-            // Wenn letzte Reihe in Tabelle
-            if (rowCounter == 3) {
-                // Dann reset auf Reihe 0 und Item 0
-                rowCounter = 0
-                itemCounter = 0
-            } else {
-                // Sonst nächste Reihe und Item auf 0
-                itemCounter = 0
-                rowCounter++
-            }
-        } else {
-            // Sonst nächstes Item
-            itemCounter++
-        }
         return selected
     }
 }

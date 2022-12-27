@@ -1,11 +1,8 @@
 package com.example.drea_text_studie.ui.studie
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +10,8 @@ import android.widget.Button
 import android.widget.TableRow
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
@@ -24,10 +21,6 @@ import com.example.drea_text_studie.util.Direction
 import com.example.drea_text_studie.util.charClicked
 import com.example.drea_text_studie.util.selectedChar
 import com.example.drea_text_studie.util.wordDone
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import kotlin.math.abs
@@ -44,7 +37,7 @@ class WordsFragment : Fragment() {
     private val STUDY_TAG = "Study"
     private val args: WordsFragmentArgs by navArgs()
 
-    private val treshold = 5.0
+    private val treshold = 10.0
     private var lastMsgReceived: Long = 0
 
     private lateinit var charButtonBinding: CharButtonBinding
@@ -54,7 +47,6 @@ class WordsFragment : Fragment() {
 
     private lateinit var SELECTED_DRAWABLE: Drawable
     private lateinit var selected: Button
-    val UNSELECTED_DRAWABLE = ColorDrawable(Color.BLACK)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,8 +58,8 @@ class WordsFragment : Fragment() {
         for (chunk in CHARS) {
             val row = TableRow(context)
             for (char in chunk) {
-                charButtonBinding = DataBindingUtil.inflate(inflater, R.layout.char_button, null, false)
-                //val button: Button = layoutInflater.inflate(R.layout.char_button, null) as Button
+                charButtonBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.char_button, null, false)
                 with(charButtonBinding.root as Button) {
                     text = char.toString()
                     id = "${binding.charTable.childCount}${row.childCount}".toInt()
@@ -82,7 +74,6 @@ class WordsFragment : Fragment() {
         }
 
         selected = (binding.charTable[0] as TableRow)[0] as Button
-       // selected.background = SELECTED_DRAWABLE
 
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = true
@@ -125,17 +116,18 @@ class WordsFragment : Fragment() {
         options.isAutomaticReconnect = true
         options.keepAliveInterval = 1200
         val token = client.connect(options)
-        token.actionCallback = object: IMqttActionListener {
+        token.actionCallback = object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken?) {
                 val subToken = client.subscribe("drea", 0)
                 Log.d(STUDY_TAG, "Connected!")
             }
+
             override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                 Log.d(STUDY_TAG, exception.toString())
             }
         }
 
-        client.setCallback(object: MqttCallback {
+        client.setCallback(object : MqttCallback {
             override fun connectionLost(cause: Throwable?) {
                 Log.d(STUDY_TAG, "Connection lost")
             }
@@ -151,18 +143,13 @@ class WordsFragment : Fragment() {
 
                     if (fingerCount < 2) return
 
-                    val rotation = msg[2].substring(0, 3).toDouble()
+                    val rotation = msg[2].substring(0, 4).toDouble()
 
-                    if (rotation < 2.0 && rotation > -2.0) return
-                    if (rotation > treshold) {
-                        selectNextChar(Direction.RIGHT)
+                    if (abs(rotation) >= treshold) {
+                        val direction = if (rotation > 0) Direction.RIGHT else Direction.LEFT
+                        Log.d(STUDY_TAG, direction.toString())
+                        selectNextChar(direction)
                     }
-                    if (rotation < -treshold) {
-                        selectNextChar(Direction.LEFT)
-                    }
-
-
-                    //Log.d(STUDY_TAG, "Time: $ts, Fingers: $fingerCount, Rotation: $rotation")
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -178,15 +165,12 @@ class WordsFragment : Fragment() {
     private fun selectNextChar(direction: Direction): Button {
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = false
-        //selected.background = UNSELECTED_DRAWABLE
         val indices = viewModel.selectNext(direction)
 
         selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
         selectedChar(selected)
-        selBinding = DataBindingUtil.findBinding<CharButtonBinding>(selected)
+        selBinding = DataBindingUtil.findBinding(selected)
         selBinding!!.sel = true
-        //selected.background = SELECTED_DRAWABLE
         return selected
     }
 }
-

@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:minWidth="76dp"
-    android:minHeight="76dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    android:background="#000000"
-    android:padding="8dp"
-    android:textAlignment="center"
-    android:textSize="36sp"
-    android:textStyle="bold">
-</Button>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="sel"
+            type="Boolean" />
+    </data>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:minWidth="76dp"
+        android:minHeight="76dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@{sel ? @drawable/selected : @drawable/unselected}"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+</layout>

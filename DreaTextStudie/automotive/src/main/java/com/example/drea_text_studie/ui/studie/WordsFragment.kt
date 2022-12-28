@@ -23,6 +23,7 @@ import com.example.drea_text_studie.util.selectedChar
 import com.example.drea_text_studie.util.wordDone
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.util.concurrent.Executor
 import kotlin.math.abs
 
 val CHARS = listOf(
@@ -37,8 +38,10 @@ class WordsFragment : Fragment() {
     private val STUDY_TAG = "Study"
     private val args: WordsFragmentArgs by navArgs()
 
-    private val treshold = 10.0
+    private val threshold = 36.0
     private var lastMsgReceived: Long = 0
+    private var lastRotation: Double = 0.0
+    private var rotationAcc: Double = 0.0
 
     private lateinit var charButtonBinding: CharButtonBinding
 
@@ -108,7 +111,7 @@ class WordsFragment : Fragment() {
             }
         }
         viewModel.getNextWord()
-
+        val isActive = false
         val clientId = MqttClient.generateClientId()
         val serverUri = "tcp://10.0.2.2:1883"
         val client = MqttAndroidClient(context, serverUri, clientId)
@@ -137,19 +140,44 @@ class WordsFragment : Fragment() {
                     val msg = message.toString().split(",")
                     if (msg.size != 4) return
 
-                    val ts = msg[0].toLong(10);
-                    if ((ts - lastMsgReceived) < 2.5 * 1000) return
                     val fingerCount = msg[1].toInt()
-
                     if (fingerCount < 2) return
 
-                    val rotation = msg[2].substring(0, 4).toDouble()
+                    val ts = msg[0].toLong(10);
+                    // Wenn länger als 0.5 Sekunden kein Finger am Controller war wird Accumulator zurückgesetzt
+                    if ((ts - lastMsgReceived) > 0.5 * 1000) rotationAcc = 0.0
 
-                    if (abs(rotation) >= treshold) {
-                        val direction = if (rotation > 0) Direction.RIGHT else Direction.LEFT
-                        Log.d(STUDY_TAG, direction.toString())
+                    lastMsgReceived = ts
+
+                    val rotation = msg[2].substring(0, 4).toDouble()
+                    val rotationSum = msg[3].substring(0, 4).toDouble()
+
+                    // Wenn Unterschied zwischen letzter Rotation und aktueller Rotation zu klein
+                    /*if (abs(lastRotation - rotation) < 1.0) {
+                        Log.d(STUDY_TAG, "Zu wenig Rotation: $rotationSum")
+                        lastRotation = rotation
+                        return
+                    }*/
+
+                    // Wenn Unterschied zwischen letzter gesamt Rotation und aktueller gesamt Rotation zu klein
+                    /*if ((abs(rotationSum) - abs(lastRotation)) < 5.0) {
+                        Log.d(STUDY_TAG, "Zu wenig Rotationdiff: $rotationSum - $lastRotation")
+                        lastRotation = rotationSum
+                        return
+                    }*/
+
+                    rotationAcc += rotation
+                    //Log.d(STUDY_TAG, rotationAcc.toString())
+                    if (abs(rotationAcc) >= threshold) {
+                        val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
+                        rotationAcc = 0.0
                         selectNextChar(direction)
                     }
+
+                    /*if (abs(rotation) >= threshold) {
+                        val direction = if (rotation > 0) Direction.RIGHT else Direction.LEFT
+                        selectNextChar(direction)
+                    }*/
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -158,7 +186,6 @@ class WordsFragment : Fragment() {
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
                 TODO("Not yet implemented")
             }
-
         })
     }
 

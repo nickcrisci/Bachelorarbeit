@@ -2,6 +2,7 @@ package com.example.drea_text_studie.ui.studie
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import java.util.concurrent.Executor
 import kotlin.math.abs
+import com.example.drea_text_studie.mqtt.DreaMqttClient
 
 val CHARS = listOf(
     (1..9).plus(0),
@@ -50,6 +52,8 @@ class WordsFragment : Fragment() {
 
     private lateinit var SELECTED_DRAWABLE: Drawable
     private lateinit var selected: Button
+
+    private val executor = ThreadPerTaskExecutor()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,31 +116,21 @@ class WordsFragment : Fragment() {
         }
         viewModel.getNextWord()
         val isActive = false
-        val clientId = MqttClient.generateClientId()
-        val serverUri = "tcp://10.0.2.2:1883"
-        val client = MqttAndroidClient(context, serverUri, clientId)
+        val mqttClient = DreaMqttClient("tcp://10.0.2.2:1883", MqttClient.generateClientId(), context)
         val options = MqttConnectOptions()
         options.isAutomaticReconnect = true
         options.keepAliveInterval = 1200
-        val token = client.connect(options)
-        token.actionCallback = object : IMqttActionListener {
-            override fun onSuccess(asyncActionToken: IMqttToken?) {
-                val subToken = client.subscribe("drea", 0)
-                Log.d(STUDY_TAG, "Connected!")
-            }
+        val token = mqttClient.connect(options)
 
-            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                Log.d(STUDY_TAG, exception.toString())
-            }
-        }
-
-        client.setCallback(object : MqttCallback {
+        mqttClient.client.setCallback(object : MqttCallback {
             override fun connectionLost(cause: Throwable?) {
                 Log.d(STUDY_TAG, "Connection lost")
             }
 
             override fun messageArrived(topic: String?, message: MqttMessage?) {
-                try {
+                executor.execute(messageRunnable(message))
+
+                /*try {
                     val msg = message.toString().split(",")
                     if (msg.size != 4) return
 
@@ -171,7 +165,8 @@ class WordsFragment : Fragment() {
                     if (abs(rotationAcc) >= threshold) {
                         val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
                         rotationAcc = 0.0
-                        selectNextChar(direction)
+                        //selectNextChar(direction)
+                        executor.execute(bindingRunnable(direction))
                     }
 
                     /*if (abs(rotation) >= threshold) {
@@ -180,13 +175,56 @@ class WordsFragment : Fragment() {
                     }*/
                 } catch (e: Exception) {
                     e.printStackTrace()
-                }
+                }*/
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
                 TODO("Not yet implemented")
             }
         })
+    }
+
+    inner class bindingRunnable(val direction: Direction): Runnable {
+        override fun run() {
+            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
+            selBinding!!.sel = false
+            val indices = viewModel.selectNext(direction)
+
+            selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
+            selectedChar(selected)
+            selBinding = DataBindingUtil.findBinding(selected)
+            selBinding!!.sel = true
+        }
+    }
+
+    inner class messageRunnable(val message: MqttMessage?): Runnable {
+        override fun run() {
+            try {
+                val msg = message.toString().split(",")
+                if (msg.size != 4) return
+
+                val fingerCount = msg[1].toInt()
+                if (fingerCount < 2) return
+
+                val ts = msg[0].toLong(10);
+                // Wenn länger als 0.5 Sekunden kein Finger am Controller war wird Accumulator zurückgesetzt
+                if ((ts - lastMsgReceived) > 0.5 * 1000) rotationAcc = 0.0
+
+                lastMsgReceived = ts
+
+                val rotation = msg[2].substring(0, 4).toDouble()
+
+                rotationAcc += rotation
+                //Log.d(STUDY_TAG, rotationAcc.toString())
+                if (abs(rotationAcc) >= threshold) {
+                    val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
+                    rotationAcc = 0.0
+                    executor.execute(bindingRunnable(direction))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun selectNextChar(direction: Direction): Button {
@@ -199,5 +237,11 @@ class WordsFragment : Fragment() {
         selBinding = DataBindingUtil.findBinding(selected)
         selBinding!!.sel = true
         return selected
+    }
+}
+
+class ThreadPerTaskExecutor: Executor {
+    override fun execute(p0: Runnable?) {
+        Thread(p0).start()
     }
 }

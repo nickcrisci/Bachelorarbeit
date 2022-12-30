@@ -2,7 +2,6 @@ package com.example.drea_text_studie.ui.studie
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.example.drea_text_studie.util.Direction
 import com.example.drea_text_studie.util.charClicked
 import com.example.drea_text_studie.util.selectedChar
 import com.example.drea_text_studie.util.wordDone
-import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import java.util.concurrent.Executor
 import kotlin.math.abs
@@ -129,53 +127,6 @@ class WordsFragment : Fragment() {
 
             override fun messageArrived(topic: String?, message: MqttMessage?) {
                 executor.execute(messageRunnable(message))
-
-                /*try {
-                    val msg = message.toString().split(",")
-                    if (msg.size != 4) return
-
-                    val fingerCount = msg[1].toInt()
-                    if (fingerCount < 2) return
-
-                    val ts = msg[0].toLong(10);
-                    // Wenn länger als 0.5 Sekunden kein Finger am Controller war wird Accumulator zurückgesetzt
-                    if ((ts - lastMsgReceived) > 0.5 * 1000) rotationAcc = 0.0
-
-                    lastMsgReceived = ts
-
-                    val rotation = msg[2].substring(0, 4).toDouble()
-                    val rotationSum = msg[3].substring(0, 4).toDouble()
-
-                    // Wenn Unterschied zwischen letzter Rotation und aktueller Rotation zu klein
-                    /*if (abs(lastRotation - rotation) < 1.0) {
-                        Log.d(STUDY_TAG, "Zu wenig Rotation: $rotationSum")
-                        lastRotation = rotation
-                        return
-                    }*/
-
-                    // Wenn Unterschied zwischen letzter gesamt Rotation und aktueller gesamt Rotation zu klein
-                    /*if ((abs(rotationSum) - abs(lastRotation)) < 5.0) {
-                        Log.d(STUDY_TAG, "Zu wenig Rotationdiff: $rotationSum - $lastRotation")
-                        lastRotation = rotationSum
-                        return
-                    }*/
-
-                    rotationAcc += rotation
-                    //Log.d(STUDY_TAG, rotationAcc.toString())
-                    if (abs(rotationAcc) >= threshold) {
-                        val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
-                        rotationAcc = 0.0
-                        //selectNextChar(direction)
-                        executor.execute(bindingRunnable(direction))
-                    }
-
-                    /*if (abs(rotation) >= threshold) {
-                        val direction = if (rotation > 0) Direction.RIGHT else Direction.LEFT
-                        selectNextChar(direction)
-                    }*/
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }*/
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {

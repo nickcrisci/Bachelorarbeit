@@ -1,5 +1,6 @@
 package com.example.drea_text_studie.ui.studie
 
+import android.util.Log
 import com.example.drea_text_studie.util.Direction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,8 @@ class WordsViewModel : ViewModel() {
 
     private val _currentWord = MutableLiveData<String>()
     val currentWord: LiveData<String> = _currentWord
+
+    var mode = 1
 
     // Variables important for keyboard
     private val maxRowLength = 10
@@ -35,11 +38,19 @@ class WordsViewModel : ViewModel() {
         return false
     }
 
-    fun selectNext(direction: Direction): List<Int> {
-        return if (direction == Direction.LEFT) {
-            selectPrevious()
-        } else {
-            selectNext()
+    fun selectNext(direction: Direction, finger: Int): List<Int> {
+        // drea mode
+        when (mode) {
+            0 -> return if (direction == Direction.LEFT) {
+                selectPrevious()
+            } else {
+                selectNext()
+            }
+            else -> return if (direction == Direction.LEFT) {
+                dreaSelectPrev(finger)
+            } else {
+                dreaSelectNext(finger)
+            }
         }
     }
 
@@ -74,6 +85,70 @@ class WordsViewModel : ViewModel() {
         } else {
             itemCounter--
         }
+        return listOf(rowCounter, itemCounter)
+    }
+
+    private fun dreaSelectNext(finger: Int): List<Int> {
+        val rowIndex = when(finger) {
+            2 -> 0
+            3 -> 1
+            4 -> 2
+            else -> 3
+        }
+
+        if (rowCounter != rowIndex) {
+            itemCounter = 0
+        } else {
+            if (rowIndex == 3) {
+                if (itemCounter == lastRowLength - 1) {
+                    itemCounter = 0
+                } else {
+                    itemCounter++
+                }
+            } else { // Wenn nicht letzte Reihe
+                // Wenn letztes Item in Reihe
+                if (itemCounter == maxRowLength - 1) {
+                    itemCounter = 0
+                } else { // Wenn NICHT letztes Item in Reihe
+                    itemCounter++
+                }
+            }
+        }
+
+        rowCounter = rowIndex
+
+        return listOf(rowCounter, itemCounter)
+    }
+
+    private fun dreaSelectPrev(finger: Int): List<Int> {
+        val rowIndex = when(finger) {
+            2 -> 0
+            3 -> 1
+            4 -> 2
+            else -> 3
+        }
+
+        if (rowCounter != rowIndex) {
+            itemCounter = 0
+        } else {
+            if (rowIndex == 3) {
+                if (itemCounter == 0) {
+                    itemCounter = lastRowLength - 1
+                } else {
+                    itemCounter--
+                }
+            } else { // Wenn nicht letzte Reihe
+                // Wenn letztes Item in Reihe
+                if (itemCounter == 0) {
+                    itemCounter = maxRowLength - 1
+                } else { // Wenn NICHT letztes Item in Reihe
+                    itemCounter--
+                }
+            }
+        }
+
+        rowCounter = rowIndex
+
         return listOf(rowCounter, itemCounter)
     }
 }

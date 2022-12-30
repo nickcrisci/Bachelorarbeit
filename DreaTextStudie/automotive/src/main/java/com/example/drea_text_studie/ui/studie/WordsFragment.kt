@@ -43,6 +43,8 @@ class WordsFragment : Fragment() {
     private var lastRotation: Double = 0.0
     private var rotationAcc: Double = 0.0
 
+    private var finger: Int = 2
+
     private lateinit var charButtonBinding: CharButtonBinding
 
     private lateinit var binding: FragmentWordsBinding
@@ -95,20 +97,27 @@ class WordsFragment : Fragment() {
                 viewModel.getNextWord()
             }
             btnPrevious.setOnClickListener {
-                selectedChar(selectNextChar(Direction.LEFT))
+                selectNextChar(Direction.LEFT)
+                //executor.execute(testRunnable(1))
             }
             btnNext.setOnClickListener {
-                selectedChar(selectNextChar(Direction.RIGHT))
+                selectNextChar(Direction.RIGHT)
+                //executor.execute(testRunnable(0))
             }
             btnDone.setOnClickListener {
                 wordDone(currentWord.text.toString(), textInput.text.toString())
                 textInput.text = ""
+                if (finger == 5) {
+                    finger = 2
+                } else {
+                    finger++
+                }
                 val done = viewModel.getNextWord()
                 if (done) {
                     textInput.text = "Du bist fertig!"
                     Log.i(STUDY_TAG, "Trial is finished")
-                    btnDone.isClickable = false
-                    btnNext.isClickable = false
+                    //btnDone.isClickable = false
+                    //btnNext.isClickable = false
                 }
             }
         }
@@ -135,11 +144,11 @@ class WordsFragment : Fragment() {
         })
     }
 
-    inner class bindingRunnable(val direction: Direction): Runnable {
+    inner class bindingRunnable(val direction: Direction, val fingerCount: Int): Runnable {
         override fun run() {
             var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
             selBinding!!.sel = false
-            val indices = viewModel.selectNext(direction)
+            val indices = viewModel.selectNext(direction, fingerCount)
 
             selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
             selectedChar(selected)
@@ -147,6 +156,23 @@ class WordsFragment : Fragment() {
             selBinding!!.sel = true
         }
     }
+
+    /*inner class testRunnable(val dir: Int): Runnable {
+        override fun run() {
+            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
+            selBinding!!.sel = false
+            val indices = if (dir == 0) {
+                viewModel.dreaSelectNext(finger)
+            } else {
+                viewModel.dreaSelectPrev(finger)
+            }
+
+            selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
+            selectedChar(selected)
+            selBinding = DataBindingUtil.findBinding(selected)
+            selBinding!!.sel = true
+        }
+    }*/
 
     inner class messageRunnable(val message: MqttMessage?): Runnable {
         override fun run() {
@@ -170,7 +196,7 @@ class WordsFragment : Fragment() {
                 if (abs(rotationAcc) >= threshold) {
                     val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
                     rotationAcc = 0.0
-                    executor.execute(bindingRunnable(direction))
+                    executor.execute(bindingRunnable(direction, fingerCount))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -181,7 +207,7 @@ class WordsFragment : Fragment() {
     private fun selectNextChar(direction: Direction): Button {
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = false
-        val indices = viewModel.selectNext(direction)
+        val indices = viewModel.selectNext(direction, finger)
 
         selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
         selectedChar(selected)

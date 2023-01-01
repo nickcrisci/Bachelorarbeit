@@ -11,4 +11,4 @@ Projektpartner sind:
 
 Gefördert wird das Projekt durch das Bundesministerium für Wirtschaft und Energie, sowie dem ZIM (Zentrales Innovationsprogramm Mittelstand)
 
-Das Projekt DREA selbst befasst sich mit der Entwicklung des Drehcontrollers im Automobile Kontext, also der Anwendung des Controllers im Auto. Allerdings findet der Controller auch darüber hinaus anwendung und wurde daher in einer Veröffentlichung auch als (https://dl.acm.org/doi/10.1145/3543758.3547561)[MultiKnob] bezeichnet.
+Das Projekt DREA selbst befasst sich mit der Entwicklung des Drehcontrollers im Automobile Kontext, also der Anwendung des Controllers im Auto. Allerdings findet der Controller auch darüber hinaus anwendung und wurde daher in einer Veröffentlichung auch als [MultiKnob](https://dl.acm.org/doi/10.1145/3543758.3547561) bezeichnet.

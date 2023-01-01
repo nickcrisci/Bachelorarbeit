@@ -31,3 +31,17 @@ Hierbei gilt:
 
 Wird über das Ende einer Reihe hinausgedreht, so wird nicht wie zuvor die Reihe gewechselt, sondern an den Anfang der selben Reihe gesprungen, sofern der Controller weiterhin mit der entsprechenden Anzahl an Fingern gedreht wird.
 Dies ermöglicht einen schnellen Wechsel zwischen den verschiedenen Reihen der Tastatur und somit theoretisch eine schnellere Eingabe von Worten.
+
+### Was wird untersucht
+Während die Worte eingegeben werden, werden verschiedene Daten aufgezeichnet:
+- Wechsel eines Buchstaben
+- Eingabe eines Buchstaben
+- Anzeigen eines neuen Wortes
+- Bestätigung der Eingabe eines Wortes
+
+Zwar scheint dies nur wenig zu sein, allerdings lassen sich hieraus verschiedene Dinge entnehmen:
+- Die Geschwindigkeit mit der zwischen den Buchstaben gewechselt wird
+- Die Geschwindigkeit mit der Buchstaben eingegeben werden
+- Die Geschwindigkeit mit der ein Wort eingegeben wird
+
+Dadurch kann untersucht werden, ob die Probanden durch den DREA im Stande sind, nicht nur Buchstaben, sondern ganze Worte schneller und effizienter einzugeben.

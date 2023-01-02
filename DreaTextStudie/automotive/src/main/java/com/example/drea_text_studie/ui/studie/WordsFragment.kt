@@ -17,14 +17,12 @@ import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.CharButtonBinding
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
-import com.example.drea_text_studie.util.Direction
-import com.example.drea_text_studie.util.charClicked
-import com.example.drea_text_studie.util.selectedChar
-import com.example.drea_text_studie.util.wordDone
 import org.eclipse.paho.client.mqttv3.*
 import java.util.concurrent.Executor
 import kotlin.math.abs
 import com.example.drea_text_studie.mqtt.DreaMqttClient
+import com.example.drea_text_studie.util.*
+import java.util.logging.Logger.global
 
 val CHARS = listOf(
     (1..9).plus(0),
@@ -37,11 +35,6 @@ class WordsFragment : Fragment() {
 
     private val STUDY_TAG = "Study"
     private val args: WordsFragmentArgs by navArgs()
-
-    private val threshold = 36.0
-    private var lastMsgReceived: Long = 0
-    private var lastRotation: Double = 0.0
-    private var rotationAcc: Double = 0.0
 
     private var finger: Int = 2
 
@@ -121,12 +114,12 @@ class WordsFragment : Fragment() {
                 }
             }
         }
+
         viewModel.getNextWord()
-        val isActive = false
         val mqttClient = DreaMqttClient("tcp://10.0.2.2:1883", MqttClient.generateClientId(), context)
         val options = MqttConnectOptions()
         options.isAutomaticReconnect = true
-        options.keepAliveInterval = 1200
+        options.keepAliveInterval = 5 * 60
         val token = mqttClient.connect(options)
 
         mqttClient.client.setCallback(object : MqttCallback {
@@ -157,22 +150,18 @@ class WordsFragment : Fragment() {
         }
     }
 
-    /*inner class testRunnable(val dir: Int): Runnable {
-        override fun run() {
-            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
-            selBinding!!.sel = false
-            val indices = if (dir == 0) {
-                viewModel.dreaSelectNext(finger)
-            } else {
-                viewModel.dreaSelectPrev(finger)
-            }
+    private var lastMsg: Long? = null
+    private val accumulator = Accumulator(36.0)
 
-            selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
-            selectedChar(selected)
-            selBinding = DataBindingUtil.findBinding(selected)
-            selBinding!!.sel = true
+    fun evalAccAction(ts: Long, rotation: Double, fingerCount: Int, resetFunction: (Double, Long) -> Unit) {
+        accumulator.reset(ts, rotation, resetFunction)
+        accumulator.accumulate(ts, rotation)
+        val direction: Direction? = accumulator.checkForGesture()
+
+        if (direction != null) {
+            executor.execute(bindingRunnable(direction, fingerCount))
         }
-    }*/
+    }
 
     inner class messageRunnable(val message: MqttMessage?): Runnable {
         override fun run() {
@@ -184,20 +173,13 @@ class WordsFragment : Fragment() {
                 if (fingerCount < 2) return
 
                 val ts = msg[0].toLong(10);
-                // Wenn länger als 0.5 Sekunden kein Finger am Controller war wird Accumulator zurückgesetzt
-                if ((ts - lastMsgReceived) > 0.5 * 1000) rotationAcc = 0.0
-
-                lastMsgReceived = ts
+                if (lastMsg == null) {
+                    lastMsg = ts
+                }
 
                 val rotation = msg[2].substring(0, 4).toDouble()
 
-                rotationAcc += rotation
-                //Log.d(STUDY_TAG, rotationAcc.toString())
-                if (abs(rotationAcc) >= threshold) {
-                    val direction = if (rotationAcc > 0) Direction.RIGHT else Direction.LEFT
-                    rotationAcc = 0.0
-                    executor.execute(bindingRunnable(direction, fingerCount))
-                }
+                evalAccAction(ts, rotation, fingerCount, accumulator.resetWhenCounter)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

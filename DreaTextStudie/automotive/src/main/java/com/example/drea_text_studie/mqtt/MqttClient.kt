@@ -5,12 +5,14 @@ import android.util.Log
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
+import org.eclipse.paho.client.mqttv3.MqttClientPersistence
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
 const val TAG = "MQTT"
 
 class DreaMqttClient(serverUri: String, clientId: String, context: Context?) {
-    val client = MqttAndroidClient(context, serverUri, clientId)
+    val client = MqttAndroidClient(context, serverUri, clientId, MemoryPersistence())
 
     fun connect(options: MqttConnectOptions): IMqttToken {
         val token = client.connect(options)

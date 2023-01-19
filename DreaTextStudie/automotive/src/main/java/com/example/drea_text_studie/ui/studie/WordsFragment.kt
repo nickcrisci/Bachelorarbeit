@@ -1,6 +1,5 @@
 package com.example.drea_text_studie.ui.studie
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,27 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TableRow
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
 import com.example.drea_text_studie.R
 import com.example.drea_text_studie.databinding.CharButtonBinding
 import com.example.drea_text_studie.databinding.FragmentWordsBinding
-import org.eclipse.paho.client.mqttv3.*
-import java.util.concurrent.Executor
-import kotlin.math.abs
 import com.example.drea_text_studie.mqtt.DreaMqttClient
 import com.example.drea_text_studie.util.*
-import java.util.logging.Logger.global
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
+import org.eclipse.paho.client.mqttv3.*
+import java.util.concurrent.Executor
 
 val CHARS = listOf(
     (1..9).plus(0),
     ('A'..'J').toList(),
     ('K'..'T').toList(),
-    ('U'..'Z').toList()
+    ('U'..'Z').toList().plus(listOf("SPACE", "ENTER"))
 )
 
 class WordsFragment : Fragment() {
@@ -43,10 +43,11 @@ class WordsFragment : Fragment() {
     private lateinit var binding: FragmentWordsBinding
     private val viewModel: WordsViewModel by viewModels()
 
-    private lateinit var SELECTED_DRAWABLE: Drawable
     private lateinit var selected: Button
 
     private val executor = ThreadPerTaskExecutor()
+
+    val channel = Channel<List<String>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,19 +55,44 @@ class WordsFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_words, container, false)
 
-        SELECTED_DRAWABLE = AppCompatResources.getDrawable(requireContext(), R.drawable.selected)!!
         for (chunk in CHARS) {
             val row = TableRow(context)
+
             for (char in chunk) {
                 charButtonBinding =
                     DataBindingUtil.inflate(inflater, R.layout.char_button, null, false)
                 with(charButtonBinding.root as Button) {
+                    var clickListener = {}
+
+                    if (char == "SPACE" || char == "ENTER") {
+                        val params = TableRow.LayoutParams()
+                        params.span = 2
+                        layoutParams = params
+                    }
+
+                    when (char) {
+                        "SPACE" -> {
+                            clickListener = {
+                                binding.textInput.append(" ")
+                                charClicked(this)
+                            }
+                        }
+                        "ENTER" -> {
+                            clickListener = {
+                                charClicked(this)
+                                done()
+                            }
+                        }
+                        else -> {
+                            clickListener = {
+                                binding.textInput.append(text)
+                                charClicked(this)
+                            }
+                        }
+                    }
                     text = char.toString()
                     id = "${binding.charTable.childCount}${row.childCount}".toInt()
-                    setOnClickListener {
-                        binding.textInput.append(text)
-                        charClicked(this)
-                    }
+                    setOnClickListener { clickListener() }
                 }
                 row.addView(charButtonBinding.root)
             }
@@ -78,7 +104,18 @@ class WordsFragment : Fragment() {
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = true
 
+        /*for (i in 0..3) {
+            selected = (binding.charTable[i] as TableRow)[0] as Button
+
+            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
+            selBinding!!.sel = true
+        }*/
+
         return binding.root
+    }
+
+    private fun done() {
+        Log.d(STUDY_TAG, "Done")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,8 +152,15 @@ class WordsFragment : Fragment() {
             }
         }
 
+        viewModel.viewModelScope.launch {
+            channel.consumeEach { message ->
+                processMessage(message)
+            }
+        }
+
         viewModel.getNextWord()
         val mqttClient = DreaMqttClient("tcp://10.0.2.2:1883", MqttClient.generateClientId(), context)
+        //val mqttClient = DreaMqttClient("tcp://hivemq.dock.moxd.io:1883", MqttClient.generateClientId(), context)
         val options = MqttConnectOptions()
         options.isAutomaticReconnect = true
         options.keepAliveInterval = 5 * 60
@@ -128,7 +172,14 @@ class WordsFragment : Fragment() {
             }
 
             override fun messageArrived(topic: String?, message: MqttMessage?) {
-                executor.execute(messageRunnable(message))
+                viewModel.viewModelScope.launch {
+                    val msg = message.toString().split(",")
+                    channel.send(msg)
+                }
+                //executor.execute(messageRunnable(message))
+                /*viewModel.viewModelScope.launch {
+                    processMessage(message)
+                }*/
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -150,7 +201,17 @@ class WordsFragment : Fragment() {
         }
     }
 
-    private var lastMsg: Long? = null
+    fun calcSelected(direction: Direction, fingerCount: Int) {
+        var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
+        selBinding!!.sel = false
+        val indices = viewModel.selectNext(direction, fingerCount)
+
+        selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
+        selectedChar(selected)
+        selBinding = DataBindingUtil.findBinding(selected)
+        selBinding!!.sel = true
+    }
+
     private val accumulator = Accumulator(36.0)
 
     fun evalAccAction(ts: Long, rotation: Double, fingerCount: Int, resetFunction: (Double, Long) -> Unit) {
@@ -159,7 +220,24 @@ class WordsFragment : Fragment() {
         val direction: Direction? = accumulator.checkForGesture()
 
         if (direction != null) {
-            executor.execute(bindingRunnable(direction, fingerCount))
+            calcSelected(direction, fingerCount)
+            //executor.execute(bindingRunnable(direction, fingerCount))
+        }
+    }
+
+    fun processMessage(msg: List<String>) {
+        try {
+            if (msg.size != 4) return
+
+            val fingerCount = msg[1].toInt()
+            if (fingerCount < 2) return
+
+            val ts = msg[0].toLong(10);
+            val rotation = msg[2].substring(0, 4).toDouble()
+
+            evalAccAction(ts, rotation, fingerCount, accumulator.resetWhenCounter)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -173,10 +251,6 @@ class WordsFragment : Fragment() {
                 if (fingerCount < 2) return
 
                 val ts = msg[0].toLong(10);
-                if (lastMsg == null) {
-                    lastMsg = ts
-                }
-
                 val rotation = msg[2].substring(0, 4).toDouble()
 
                 evalAccAction(ts, rotation, fingerCount, accumulator.resetWhenCounter)

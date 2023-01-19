@@ -17,7 +17,7 @@ class WordsViewModel : ViewModel() {
     // Variables important for keyboard
     private val maxRowLength = 10
     private val maxRows = 4
-    private val lastRowLength = 6
+    private val lastRowLength = 8
     private var rowCounter = 0
     private var itemCounter = 0
 

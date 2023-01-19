@@ -3,6 +3,7 @@ package com.example.drea_text_studie.util
 import android.util.Log
 import android.widget.Button
 import org.json.JSONObject
+import java.sql.Timestamp
 
 const val TAG = "Study"
 
@@ -19,7 +20,8 @@ fun charClicked(char: Button) {
 }
 
 fun selectedChar(char: Button) {
-    val json = "{\"event\": \"${Events.Char_Selected}\",\"character\": \"${char.text}\"}"
+    val timestamp = System.currentTimeMillis()
+    val json = "{\"event\": \"${Events.Char_Selected}\",\"character\": \"${char.text}\", \"timestamp\": \"${timestamp}\"}"
     Log.i(TAG, json)
 }
 

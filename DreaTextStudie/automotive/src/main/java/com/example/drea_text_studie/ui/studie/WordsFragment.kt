@@ -49,12 +49,27 @@ class WordsFragment : Fragment() {
 
     val channel = Channel<List<String>>()
 
+    private var myMedia: ClickPlayer? = null
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myMedia?.destroy()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_words, container, false)
 
+        myMedia = ClickPlayer(requireContext())
+
+        /**
+         * Tastatur erzeugen
+         *
+         * Hier wird die Tastatur erzeugt. Durch das Anpassen von CHARS kann
+         * die Tastatur angepasst werden
+         */
         for (chunk in CHARS) {
             val row = TableRow(context)
 
@@ -70,7 +85,7 @@ class WordsFragment : Fragment() {
                         layoutParams = params
                     }
 
-                    when (char) {
+                    /*when (char) {
                         "SPACE" -> {
                             clickListener = {
                                 binding.textInput.append(" ")
@@ -89,7 +104,7 @@ class WordsFragment : Fragment() {
                                 charClicked(this)
                             }
                         }
-                    }
+                    }*/
                     text = char.toString()
                     id = "${binding.charTable.childCount}${row.childCount}".toInt()
                     setOnClickListener { clickListener() }
@@ -99,23 +114,36 @@ class WordsFragment : Fragment() {
             binding.charTable.addView(row)
         }
 
+        /*if (args.mode) {
+            // DREA Modus an
+            viewModel.mode = 1
+        } else {
+            // DREA Modus aus
+            viewModel.mode = 0
+        }*/
+
         selected = (binding.charTable[0] as TableRow)[0] as Button
 
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = true
 
-        /*for (i in 0..3) {
-            selected = (binding.charTable[i] as TableRow)[0] as Button
-
-            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
-            selBinding!!.sel = true
-        }*/
-
         return binding.root
     }
 
+    /**
+     * Done Funktion
+     *
+     * Wird ausgeführt, wenn Proband auf "Enter" klickt. Falls kein weiteres Wort mehr
+     * verfügbar ist, wird das Ende des Durchlaufes gelogged.
+     */
     private fun done() {
-        Log.d(STUDY_TAG, "Done")
+        wordDone(binding.currentWord.text.toString(), binding.textInput.text.toString())
+        binding.textInput.text = ""
+        val done = viewModel.getNextWord()
+        if (done) {
+            binding.textInput.text = "Du bist fertig!"
+            trialEnded()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,9 +151,6 @@ class WordsFragment : Fragment() {
         with(binding) {
             wordsViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
-            nextWord.setOnClickListener {
-                viewModel.getNextWord()
-            }
             btnPrevious.setOnClickListener {
                 selectNextChar(Direction.LEFT)
                 //executor.execute(testRunnable(1))
@@ -134,21 +159,10 @@ class WordsFragment : Fragment() {
                 selectNextChar(Direction.RIGHT)
                 //executor.execute(testRunnable(0))
             }
-            btnDone.setOnClickListener {
-                wordDone(currentWord.text.toString(), textInput.text.toString())
-                textInput.text = ""
-                if (finger == 5) {
-                    finger = 2
-                } else {
-                    finger++
-                }
-                val done = viewModel.getNextWord()
-                if (done) {
-                    textInput.text = "Du bist fertig!"
-                    Log.i(STUDY_TAG, "Trial is finished")
-                    //btnDone.isClickable = false
-                    //btnNext.isClickable = false
-                }
+            btnStart.setOnClickListener {
+                viewModel.getNextWord()
+                it.visibility = View.GONE
+                trialStarted()
             }
         }
 
@@ -158,13 +172,33 @@ class WordsFragment : Fragment() {
             }
         }
 
-        viewModel.getNextWord()
         val mqttClient = DreaMqttClient("tcp://10.0.2.2:1883", MqttClient.generateClientId(), context)
+        val piClient = DreaMqttClient("tcp://192.168.178.73:1883", MqttClient.generateClientId(), context)
         //val mqttClient = DreaMqttClient("tcp://hivemq.dock.moxd.io:1883", MqttClient.generateClientId(), context)
         val options = MqttConnectOptions()
         options.isAutomaticReconnect = true
         options.keepAliveInterval = 5 * 60
         val token = mqttClient.connect(options)
+        val piToken = piClient.connect(options)
+
+        piClient.client.setCallback(object : MqttCallback {
+            override fun connectionLost(cause: Throwable?) {
+                Log.d(STUDY_TAG, "Connection lost")
+            }
+
+            override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    val msg = message.toString().split(",")
+                    val fingerCount = msg[1].toInt()
+                    if (fingerCount == -1) {
+                        inputCharacter()
+                        return
+                    }
+            }
+
+            override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                TODO("Not yet implemented")
+            }
+        })
 
         mqttClient.client.setCallback(object : MqttCallback {
             override fun connectionLost(cause: Throwable?) {
@@ -201,7 +235,7 @@ class WordsFragment : Fragment() {
         }
     }
 
-    fun calcSelected(direction: Direction, fingerCount: Int) {
+    private fun calcSelected(direction: Direction, fingerCount: Int) {
         var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
         selBinding!!.sel = false
         val indices = viewModel.selectNext(direction, fingerCount)
@@ -209,10 +243,38 @@ class WordsFragment : Fragment() {
         selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
         selectedChar(selected)
         selBinding = DataBindingUtil.findBinding(selected)
+        myMedia?.playClickSound()
         selBinding!!.sel = true
     }
 
-    private val accumulator = Accumulator(36.0)
+    /**
+     * Buchstaben eingeben
+     *
+     * Diese Funktion wird ausgeführt, wenn der Proband einen Buchstaben eingibt.
+     * Dabei wird der Text des aktuell ausgewählten Buttons (selected)
+     * dem Textfeld angefügt.
+     *
+     * Wird "SPACE" oder "ENTER" geklickt, so wird der entsprechende alternative
+     * Code ausgeführt.
+     */
+    private fun inputCharacter() {
+        var toAppend = ""
+        when (selected.text) {
+            "SPACE" -> {
+                toAppend = " "
+            }
+            "ENTER" -> {
+                done()
+            }
+            else -> {
+                toAppend = selected.text.toString()
+            }
+        }
+        binding.textInput.append(toAppend)
+        charClicked(selected)
+    }
+
+    private val accumulator = Accumulator(18.0)
 
     fun evalAccAction(ts: Long, rotation: Double, fingerCount: Int, resetFunction: (Double, Long) -> Unit) {
         accumulator.reset(ts, rotation, resetFunction)
@@ -225,17 +287,26 @@ class WordsFragment : Fragment() {
         }
     }
 
+    /**
+     * Verarbeitet eine MQTT Nachricht
+     *
+     * Diese Funktion erhält eine MQTT Nachricht bzw. die in der Nachricht enthaltenen Daten.
+     * Daraufhin werden diese Daten verarbeitet und eine enstprechende Aktion ausgeführt.
+     *
+     * @param msg die in der MQTT Nachricht enthaltenen Daten
+     */
     fun processMessage(msg: List<String>) {
         try {
             if (msg.size != 4) return
 
             val fingerCount = msg[1].toInt()
+
             if (fingerCount < 2) return
 
             val ts = msg[0].toLong(10);
             val rotation = msg[2].substring(0, 4).toDouble()
 
-            evalAccAction(ts, rotation, fingerCount, accumulator.resetWhenCounter)
+            evalAccAction(ts, -rotation, fingerCount, accumulator.resetWhenSignChanges)
         } catch (e: Exception) {
             e.printStackTrace()
         }

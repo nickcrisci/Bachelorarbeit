@@ -1,6 +1,7 @@
 package com.example.drea_text_studie.ui.studie
 
 import android.util.Log
+import android.view.View
 import com.example.drea_text_studie.util.Direction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

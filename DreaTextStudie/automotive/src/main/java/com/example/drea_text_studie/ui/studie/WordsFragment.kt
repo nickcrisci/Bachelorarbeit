@@ -173,11 +173,32 @@ class WordsFragment : Fragment() {
         }
 
         val mqttClient = DreaMqttClient("tcp://10.0.2.2:1883", MqttClient.generateClientId(), context)
+        val piClient = DreaMqttClient("tcp://192.168.178.73:1883", MqttClient.generateClientId(), context)
         //val mqttClient = DreaMqttClient("tcp://hivemq.dock.moxd.io:1883", MqttClient.generateClientId(), context)
         val options = MqttConnectOptions()
         options.isAutomaticReconnect = true
         options.keepAliveInterval = 5 * 60
         val token = mqttClient.connect(options)
+        val piToken = piClient.connect(options)
+
+        piClient.client.setCallback(object : MqttCallback {
+            override fun connectionLost(cause: Throwable?) {
+                Log.d(STUDY_TAG, "Connection lost")
+            }
+
+            override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    val msg = message.toString().split(",")
+                    val fingerCount = msg[1].toInt()
+                    if (fingerCount == -1) {
+                        inputCharacter()
+                        return
+                    }
+            }
+
+            override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                TODO("Not yet implemented")
+            }
+        })
 
         mqttClient.client.setCallback(object : MqttCallback {
             override fun connectionLost(cause: Throwable?) {
@@ -253,7 +274,7 @@ class WordsFragment : Fragment() {
         charClicked(selected)
     }
 
-    private val accumulator = Accumulator(36.0)
+    private val accumulator = Accumulator(18.0)
 
     fun evalAccAction(ts: Long, rotation: Double, fingerCount: Int, resetFunction: (Double, Long) -> Unit) {
         accumulator.reset(ts, rotation, resetFunction)
@@ -279,16 +300,13 @@ class WordsFragment : Fragment() {
             if (msg.size != 4) return
 
             val fingerCount = msg[1].toInt()
-            if (fingerCount == -1) {
-                inputCharacter()
-                return
-            }
+
             if (fingerCount < 2) return
 
             val ts = msg[0].toLong(10);
             val rotation = msg[2].substring(0, 4).toDouble()
 
-            evalAccAction(ts, rotation, fingerCount, accumulator.resetWhenSignChanges)
+            evalAccAction(ts, -rotation, fingerCount, accumulator.resetWhenSignChanges)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -13,6 +13,8 @@ class WordsViewModel : ViewModel() {
     private val _currentWord = MutableLiveData<String>()
     val currentWord: LiveData<String> = _currentWord
 
+    private var mistakeCounter = 0
+
     var mode = 1
 
     // Variables important for keyboard
@@ -24,6 +26,32 @@ class WordsViewModel : ViewModel() {
 
     private var wordsList: MutableList<String> = mutableListOf()
 
+    /**
+     * Funktion die überprüft, ob der eingegebene Buchstabe richtig war
+     *
+     * @param inputWord das bisher eingegebene Wort
+     * @param input der geklickte Buchstabe
+     * @return ob die Eingabe korrekt war
+     */
+    fun spellCheck(inputWord: String, input: String): Boolean {
+        val word = currentWord.value!!.toList()
+        val currentChar = word[inputWord.length].uppercase()
+        if(currentChar == input) {
+            return true
+        }
+        mistakeCounter++
+        return false
+    }
+
+    fun wordCheck(inputWord: String): Boolean {
+        return inputWord == currentWord.value!!.uppercase()
+    }
+
+    /**
+     * Funktion die das nächste einzugebende Wort liefert
+     *
+     * @return Ob alle Worte eingegeben wurden. Ist die Liste leer, so wird true zurückgegeben
+     */
     fun getNextWord(): Boolean {
         val word = allWordsList.random()
         if (wordsList.contains(word)) {
@@ -55,6 +83,10 @@ class WordsViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Berechnet den Index für den nächsten Buchstaben im normalen Modus
+     * @return den Index als list<Int>: Reihenindex und Positionsindex
+     */
     private fun selectNext(): List<Int> {
         if (rowCounter == maxRows - 1) {
             if (itemCounter == lastRowLength - 1) {
@@ -74,6 +106,10 @@ class WordsViewModel : ViewModel() {
         return listOf(rowCounter, itemCounter)
     }
 
+    /**
+     * Berechnet den Index für den vorherigen Buchstaben im normalen Modus
+     * @return den Index als list<Int>: Reihenindex und Positionsindex
+     */
     private fun selectPrevious(): List<Int> {
         if (itemCounter == 0) {
             if (rowCounter == 0) {
@@ -89,6 +125,31 @@ class WordsViewModel : ViewModel() {
         return listOf(rowCounter, itemCounter)
     }
 
+    /**
+     * Funktion um einen Reihensprung durchzuführen
+     *
+     * Diese Funktionen ermöglicht den Sprung auf den gleichen Index in der gewollten Reihe.
+     * Dabei muss beachtet werden, dass die Liste der letzten Reihe weniger Elemente enthält,
+     * da "SPACE" und "ENTER" jeweils zwei Plätze beeinspruchen.
+     * Daher muss der Index bei einem Sprung in die letzte Reihe ggf. angepasst werden.
+     */
+    private fun rowJump(rowIndex: Int) {
+        if (rowIndex == maxRows - 1) {
+            itemCounter = when(itemCounter) {
+                7 -> 6
+                8, 9 -> 7
+                else -> itemCounter
+            }
+        } else if (rowCounter == maxRows - 1 && itemCounter == 7) {
+            itemCounter = 8
+        }
+    }
+
+    /**
+     * Berechnet den Index für den nächsten Buchstaben im DREA Modus
+     * @param finger die Anzahl an Finger am Controller
+     * @return den Index als list<Int>: Reihenindex und Positionsindex
+     */
     private fun dreaSelectNext(finger: Int): List<Int> {
         val rowIndex = when(finger) {
             2 -> 0
@@ -97,8 +158,9 @@ class WordsViewModel : ViewModel() {
             else -> 3
         }
 
+        // Sprung auf gleichen Index der nächsten Zeile
         if (rowCounter != rowIndex) {
-            itemCounter = 0
+            rowJump(rowIndex)
         } else {
             if (rowIndex == 3) {
                 if (itemCounter == lastRowLength - 1) {
@@ -121,6 +183,11 @@ class WordsViewModel : ViewModel() {
         return listOf(rowCounter, itemCounter)
     }
 
+    /**
+     * Berechnet den Index für den vorherigen Buchstaben im DREA Modus
+     * @param finger die Anzahl an Finger am Controller
+     * @return den Index als list<Int>: Reihenindex und Positionsindex
+     */
     private fun dreaSelectPrev(finger: Int): List<Int> {
         val rowIndex = when(finger) {
             2 -> 0
@@ -130,7 +197,7 @@ class WordsViewModel : ViewModel() {
         }
 
         if (rowCounter != rowIndex) {
-            itemCounter = 0
+            rowJump(rowIndex)
         } else {
             if (rowIndex == 3) {
                 if (itemCounter == 0) {

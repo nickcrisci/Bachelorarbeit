@@ -13,6 +13,8 @@ class WordsViewModel : ViewModel() {
     private val _currentWord = MutableLiveData<String>()
     val currentWord: LiveData<String> = _currentWord
 
+    private var mistakeCounter = 0
+
     var mode = 1
 
     // Variables important for keyboard
@@ -23,6 +25,27 @@ class WordsViewModel : ViewModel() {
     private var itemCounter = 0
 
     private var wordsList: MutableList<String> = mutableListOf()
+
+    /**
+     * Funktion die überprüft, ob der eingegebene Buchstabe richtig war
+     *
+     * @param inputWord das bisher eingegebene Wort
+     * @param input der geklickte Buchstabe
+     * @return ob die Eingabe korrekt war
+     */
+    fun spellCheck(inputWord: String, input: String): Boolean {
+        val word = currentWord.value!!.toList()
+        val currentChar = word[inputWord.length].uppercase()
+        if(currentChar == input) {
+            return true
+        }
+        mistakeCounter++
+        return false
+    }
+
+    fun wordCheck(inputWord: String): Boolean {
+        return inputWord == currentWord.value!!.uppercase()
+    }
 
     /**
      * Funktion die das nächste einzugebende Wort liefert
@@ -43,7 +66,6 @@ class WordsViewModel : ViewModel() {
         }
         return false
     }
-
 
     fun selectNext(direction: Direction, finger: Int): List<Int> {
         // drea mode

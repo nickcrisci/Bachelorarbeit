@@ -137,12 +137,14 @@ class WordsFragment : Fragment() {
      * verfügbar ist, wird das Ende des Durchlaufes gelogged.
      */
     private fun done() {
-        wordDone(binding.currentWord.text.toString(), binding.textInput.text.toString())
-        binding.textInput.text = ""
-        val done = viewModel.getNextWord()
-        if (done) {
-            binding.textInput.text = "Du bist fertig!"
-            trialEnded()
+        if (viewModel.wordCheck(binding.textInput.text.toString())) {
+            wordDone(binding.currentWord.text.toString(), binding.textInput.text.toString())
+            binding.textInput.text = ""
+            val done = viewModel.getNextWord()
+            if (done) {
+                binding.textInput.text = "Du bist fertig!"
+                trialEnded()
+            }
         }
     }
 
@@ -210,6 +212,13 @@ class WordsFragment : Fragment() {
                     val msg = message.toString().split(",")
                     channel.send(msg)
                 }
+
+                val msg = message.toString().split(",")
+                val fingerCount = msg[1].toInt()
+                if (fingerCount == -1) {
+                    inputCharacter()
+                    return
+                }
                 //executor.execute(messageRunnable(message))
                 /*viewModel.viewModelScope.launch {
                     processMessage(message)
@@ -220,19 +229,6 @@ class WordsFragment : Fragment() {
                 TODO("Not yet implemented")
             }
         })
-    }
-
-    inner class bindingRunnable(val direction: Direction, val fingerCount: Int): Runnable {
-        override fun run() {
-            var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
-            selBinding!!.sel = false
-            val indices = viewModel.selectNext(direction, fingerCount)
-
-            selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
-            selectedChar(selected)
-            selBinding = DataBindingUtil.findBinding(selected)
-            selBinding!!.sel = true
-        }
     }
 
     private fun calcSelected(direction: Direction, fingerCount: Int) {
@@ -270,8 +266,11 @@ class WordsFragment : Fragment() {
                 toAppend = selected.text.toString()
             }
         }
-        binding.textInput.append(toAppend)
-        charClicked(selected)
+        val correct = viewModel.spellCheck(binding.textInput.text.toString(), toAppend)
+        if (correct) {
+            binding.textInput.append(toAppend)
+            charClicked(selected)
+        }
     }
 
     private val accumulator = Accumulator(18.0)

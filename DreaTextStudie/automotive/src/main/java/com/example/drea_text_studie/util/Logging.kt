@@ -14,6 +14,9 @@ enum class Events {
     TRIAL_END
 }
 
+// Data String im CSV Format:
+// event, timestamp, button, finger, target, received
+
 private fun getTimestamp(): Long {
     return System.currentTimeMillis()
 }

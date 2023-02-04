@@ -15,13 +15,43 @@ enum class Events {
 }
 
 // Data String im CSV Format:
-// event, timestamp, button, finger, target, received
+// event, timestamp, button, finger, word
 
 private fun getTimestamp(): Long {
     return System.currentTimeMillis()
 }
 
 fun trialStarted() {
+    val csv = "{${Events.TRIAL_START},${getTimestamp()},None,None,None}"
+    Log.i(TAG, csv)
+}
+
+fun trialEnded() {
+    val csv = "{${Events.TRIAL_END},${getTimestamp()},None,None,None}"
+    Log.i(TAG, csv)
+}
+
+fun charClicked(char: Button) {
+    val csv = "{${Events.CHAR_CLICKED},${getTimestamp()},${char.text},None,None}"
+    Log.i(TAG, csv)
+}
+
+fun selectedChar(char: Button, finger: Int) {
+    val csv = "{${Events.CHAR_SELECTED},${getTimestamp()},${char.text},$finger,None}"
+    Log.i(TAG, csv)
+}
+
+fun nextWord(word: String) {
+    val csv = "{${Events.WORD_NEXT},${getTimestamp()},None,None,$word}"
+    Log.i(TAG, csv)
+}
+
+fun wordDone(word: String) {
+    val csv = "{${Events.WORD_DONE},${getTimestamp()},None,None,$word}"
+    Log.i(TAG, csv)
+}
+
+/*fun trialStarted() {
     val json = "{\"event\": \"${Events.TRIAL_START}\", \"timestamp\": ${getTimestamp()}}"
     Log.i(TAG, json)
 }
@@ -49,4 +79,4 @@ fun nextWord(word: String) {
 fun wordDone(targetWord: String, received: String) {
     val json = "{\"event\": \"${Events.WORD_DONE}\",\"target\": \"$targetWord\", \"received\": \"$received\", \"timestamp\": ${getTimestamp()}}"
     Log.i(TAG, json)
-}
+}*/

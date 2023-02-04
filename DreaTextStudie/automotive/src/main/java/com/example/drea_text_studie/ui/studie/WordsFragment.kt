@@ -154,11 +154,11 @@ class WordsFragment : Fragment() {
             wordsViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
             btnPrevious.setOnClickListener {
-                selectNextChar(Direction.LEFT)
+                //selectNextChar(Direction.LEFT)
                 //executor.execute(testRunnable(1))
             }
             btnNext.setOnClickListener {
-                selectNextChar(Direction.RIGHT)
+                //selectNextChar(Direction.RIGHT)
                 //executor.execute(testRunnable(0))
             }
             btnStart.setOnClickListener {
@@ -328,18 +328,6 @@ class WordsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-    }
-
-    private fun selectNextChar(direction: Direction): Button {
-        var selBinding = DataBindingUtil.getBinding<CharButtonBinding>(selected)
-        selBinding!!.sel = false
-        val indices = viewModel.selectNext(direction, finger)
-
-        selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
-        selectedChar(selected)
-        selBinding = DataBindingUtil.findBinding(selected)
-        selBinding!!.sel = true
-        return selected
     }
 }
 

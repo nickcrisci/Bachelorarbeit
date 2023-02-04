@@ -138,7 +138,7 @@ class WordsFragment : Fragment() {
      */
     private fun done() {
         if (viewModel.wordCheck(binding.textInput.text.toString())) {
-            wordDone(binding.currentWord.text.toString(), binding.textInput.text.toString())
+            wordDone(viewModel.currentWord.value!!)
             binding.textInput.text = ""
             val done = viewModel.getNextWord()
             if (done) {
@@ -237,7 +237,7 @@ class WordsFragment : Fragment() {
         val indices = viewModel.selectNext(direction, fingerCount)
 
         selected = (binding.charTable[indices[0]] as TableRow)[indices[1]] as Button
-        selectedChar(selected)
+        selectedChar(selected, fingerCount)
         selBinding = DataBindingUtil.findBinding(selected)
         myMedia?.playClickSound()
         selBinding!!.sel = true

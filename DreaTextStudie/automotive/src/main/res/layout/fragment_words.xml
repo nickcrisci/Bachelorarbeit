@@ -43,6 +43,18 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/currentWordView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="48dp"
+            android:text="START"
+            android:visibility="visible"
+            android:layout_margin="80dp"/>
+
         <LinearLayout
             android:id="@+id/inputView"
             android:layout_width="match_parent"
@@ -115,18 +127,6 @@
             android:showDividers="middle|beginning|end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/buttons" />
-
-        <Button
-            android:id="@+id/btnStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/charTable"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="48dp"
-            android:text="START"
-            android:visibility="visible"
-            android:layout_margin="80dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

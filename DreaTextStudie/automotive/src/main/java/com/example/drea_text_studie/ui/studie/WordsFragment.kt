@@ -143,6 +143,7 @@ class WordsFragment : Fragment() {
             val done = viewModel.getNextWord()
             if (done) {
                 binding.textInput.text = "Du bist fertig!"
+                Log.i(STUDY_TAG, "Proband hat insgesamt ${viewModel.mistakeCounter} Fehler gemacht.")
                 trialEnded()
             }
         }

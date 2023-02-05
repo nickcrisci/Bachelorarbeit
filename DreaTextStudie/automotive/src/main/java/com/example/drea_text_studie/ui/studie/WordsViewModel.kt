@@ -13,7 +13,7 @@ class WordsViewModel : ViewModel() {
     private val _currentWord = MutableLiveData<String>()
     val currentWord: LiveData<String> = _currentWord
 
-    private var mistakeCounter = 0
+    var mistakeCounter = 0
 
     var mode = 1
 

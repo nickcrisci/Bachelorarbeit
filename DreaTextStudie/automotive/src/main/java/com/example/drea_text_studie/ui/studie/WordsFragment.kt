@@ -114,13 +114,13 @@ class WordsFragment : Fragment() {
             binding.charTable.addView(row)
         }
 
-        /*if (args.mode) {
+        if (args.mode) {
             // DREA Modus an
             viewModel.mode = 1
         } else {
             // DREA Modus aus
             viewModel.mode = 0
-        }*/
+        }
 
         selected = (binding.charTable[0] as TableRow)[0] as Button
 

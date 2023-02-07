@@ -43,5 +43,6 @@ Zwar scheint dies nur wenig zu sein, allerdings lassen sich hieraus verschiedene
 - Die Geschwindigkeit mit der zwischen den Buchstaben gewechselt wird
 - Die Geschwindigkeit mit der Buchstaben eingegeben werden
 - Die Geschwindigkeit mit der ein Wort eingegeben wird
+- Die Anzahl in Drehbewegungen, die notwendig sind, um ein Wort einzugeben
 
 Dadurch kann untersucht werden, ob die Probanden durch den DREA im Stande sind, nicht nur Buchstaben, sondern ganze Worte schneller und effizienter einzugeben.

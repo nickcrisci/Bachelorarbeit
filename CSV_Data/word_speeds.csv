@@ -1,0 +1,457 @@
+id,sex,age,mode,word,length,time,actions
+1,male,52,drea,Auto,4,67.775,69
+1,male,52,drea,RPR1,4,50.803,53
+1,male,52,drea,51063 Koeln,11,79.566,103
+1,male,52,drea,54290 Trier,11,147.427,186
+1,male,52,drea,Tanken,6,64.544,96
+1,male,52,drea,02262 Wiehl,11,73.943,117
+1,male,52,drea,51674 Wiehl,11,70.623,109
+1,male,52,drea,Musik,5,35.975,54
+1,male,52,drea,57462 Olpe,10,58.621,107
+1,male,52,drea,Max Muster,10,74.033,135
+1,male,52,drea,Radio,5,34.111,61
+1,male,52,drea,Navi,4,28.734,57
+1,male,52,drea,SWR3,4,44.939,46
+1,male,52,drea,Italien,7,63.018,105
+1,male,52,drea,Eminem,6,41.638,53
+1,male,52,drea,Strasse,7,37.834,65
+1,male,52,drea,WDR 4,5,43.696,66
+1,male,52,drea,Jane Doe,8,69.792,86
+1,male,52,drea,53119 Bonn,10,57.422,101
+1,male,52,normal,51063 Koeln,11,64.816,112
+1,male,52,normal,51674 Wiehl,11,48.022,90
+1,male,52,normal,57462 Olpe,10,47.234,79
+1,male,52,normal,54290 Trier,11,64.094,130
+1,male,52,normal,Musik,5,31.674,82
+1,male,52,normal,Auto,4,27.745,57
+1,male,52,normal,02262 Wiehl,11,45.312,118
+1,male,52,normal,Max Muster,10,51.881,133
+1,male,52,normal,SWR3,4,27.401,69
+1,male,52,normal,RPR1,4,22.924,51
+1,male,52,normal,Tanken,6,44.495,85
+1,male,52,normal,Jane Doe,8,51.77,143
+1,male,52,normal,Radio,5,28.453,66
+1,male,52,normal,WDR 4,5,39.728,92
+1,male,52,normal,Eminem,6,42.761,95
+1,male,52,normal,Navi,4,30.324,87
+1,male,52,normal,53119 Bonn,10,52.14,93
+1,male,52,normal,Italien,7,42.38,112
+1,male,52,normal,Strasse,7,32.068,92
+2,male,40,drea,51674 Wiehl,11,108.319,89
+2,male,40,drea,53119 Bonn,10,95.408,56
+2,male,40,drea,Musik,5,61.927,49
+2,male,40,drea,Eminem,6,76.262,89
+2,male,40,drea,51063 Koeln,11,126.087,93
+2,male,40,drea,Auto,4,59.506,58
+2,male,40,drea,Radio,5,30.467,38
+2,male,40,drea,Max Muster,10,94.323,81
+2,male,40,drea,WDR 4,5,53.369,58
+2,male,40,drea,Tanken,6,49.41,54
+2,male,40,drea,54290 Trier,11,67.386,74
+2,male,40,drea,Navi,4,29.105,32
+2,male,40,drea,57462 Olpe,10,87.382,83
+2,male,40,drea,02262 Wiehl,11,69.987,90
+2,male,40,drea,Jane Doe,8,58.324,48
+2,male,40,drea,RPR1,4,31.588,31
+2,male,40,drea,Italien,7,55.098,76
+2,male,40,drea,Strasse,7,36.239,72
+2,male,40,drea,SWR3,4,32.115,40
+2,male,40,normal,Radio,5,53.525,92
+2,male,40,normal,Max Muster,10,84.443,163
+2,male,40,normal,SWR3,4,29.588,83
+2,male,40,normal,Italien,7,73.134,160
+2,male,40,normal,Musik,5,40.896,106
+2,male,40,normal,RPR1,4,32.616,57
+2,male,40,normal,Jane Doe,8,50.55,149
+2,male,40,normal,WDR 4,5,30.313,102
+2,male,40,normal,51674 Wiehl,11,77.886,146
+2,male,40,normal,53119 Bonn,10,59.039,119
+2,male,40,normal,54290 Trier,11,55.656,100
+2,male,40,normal,Navi,4,28.931,91
+2,male,40,normal,Strasse,7,39.21,128
+2,male,40,normal,Auto,4,26.797,85
+2,male,40,normal,Tanken,6,39.429,85
+2,male,40,normal,57462 Olpe,10,62.201,119
+2,male,40,normal,51063 Koeln,11,79.352,130
+2,male,40,normal,Eminem,6,36.801,93
+2,male,40,normal,02262 Wiehl,11,67.333,140
+3,female,35,drea,54290 Trier,11,152.292,123
+3,female,35,drea,Auto,4,85.512,103
+3,female,35,drea,Italien,7,105.688,169
+3,female,35,drea,Musik,5,113.627,101
+3,female,35,drea,53119 Bonn,10,118.44,85
+3,female,35,drea,57462 Olpe,10,139.247,125
+3,female,35,drea,Navi,4,109.839,81
+3,female,35,drea,51063 Koeln,11,151.504,160
+3,female,35,drea,RPR1,4,67.609,58
+3,female,35,drea,Eminem,6,75.583,78
+3,female,35,drea,SWR3,4,60.027,57
+3,female,35,drea,51674 Wiehl,11,72.91,80
+3,female,35,drea,WDR 4,5,48.306,50
+3,female,35,drea,Radio,5,36.449,53
+3,female,35,drea,Jane Doe,8,74.971,99
+3,female,35,drea,02262 Wiehl,11,108.639,135
+3,female,35,drea,Strasse,7,50.778,59
+3,female,35,drea,Max Muster,10,98.045,126
+3,female,35,drea,Tanken,6,51.254,70
+3,female,35,normal,02262 Wiehl,11,107.988,162
+3,female,35,normal,Radio,5,39.547,72
+3,female,35,normal,54290 Trier,11,108.148,138
+3,female,35,normal,Eminem,6,60.222,99
+3,female,35,normal,53119 Bonn,10,87.501,153
+3,female,35,normal,Italien,7,74.45,118
+3,female,35,normal,57462 Olpe,10,91.713,111
+3,female,35,normal,WDR 4,5,63.992,90
+3,female,35,normal,Max Muster,10,96.642,143
+3,female,35,normal,Strasse,7,66.068,108
+3,female,35,normal,Musik,5,49.446,80
+3,female,35,normal,Tanken,6,53.181,81
+3,female,35,normal,51674 Wiehl,11,90.13,150
+3,female,35,normal,RPR1,4,44.463,35
+3,female,35,normal,Auto,4,51.874,99
+3,female,35,normal,SWR3,4,32.654,55
+3,female,35,normal,51063 Koeln,11,83.922,126
+3,female,35,normal,Navi,4,49.501,91
+3,female,35,normal,Jane Doe,8,62.131,151
+4,female,44,drea,Auto,4,71.99,35
+4,female,44,drea,02262 Wiehl,11,96.805,96
+4,female,44,drea,Jane Doe,8,117.392,100
+4,female,44,drea,Eminem,6,174.87,154
+4,female,44,drea,WDR 4,5,83.211,45
+4,female,44,drea,54290 Trier,11,76.803,56
+4,female,44,drea,Navi,4,46.05,39
+4,female,44,drea,Radio,5,44.14,47
+4,female,44,drea,SWR3,4,46.942,46
+4,female,44,drea,Italien,7,65.447,69
+4,female,44,drea,53119 Bonn,10,78.829,66
+4,female,44,drea,Musik,5,79.115,92
+4,female,44,drea,Tanken,6,87.065,84
+4,female,44,drea,Strasse,7,121.42,145
+4,female,44,drea,51674 Wiehl,11,166.338,142
+4,female,44,drea,57462 Olpe,10,96.113,87
+4,female,44,drea,RPR1,4,39.404,48
+4,female,44,drea,51063 Koeln,11,75.301,82
+4,female,44,drea,Max Muster,10,160.236,129
+4,female,44,normal,Tanken,6,54.583,107
+4,female,44,normal,Musik,5,37.786,66
+4,female,44,normal,SWR3,4,30.466,43
+4,female,44,normal,57462 Olpe,10,48.133,81
+4,female,44,normal,51674 Wiehl,11,94.694,178
+4,female,44,normal,Strasse,7,47.13,102
+4,female,44,normal,51063 Koeln,11,81.166,128
+4,female,44,normal,Italien,7,49.343,106
+4,female,44,normal,WDR 4,5,40.443,68
+4,female,44,normal,Radio,5,36.723,66
+4,female,44,normal,Jane Doe,8,58.31,141
+4,female,44,normal,02262 Wiehl,11,55.637,104
+4,female,44,normal,Max Muster,10,61.648,123
+4,female,44,normal,Auto,4,31.01,61
+4,female,44,normal,RPR1,4,27.604,41
+4,female,44,normal,Eminem,6,36.656,89
+4,female,44,normal,54290 Trier,11,56.095,90
+4,female,44,normal,53119 Bonn,10,43.124,85
+4,female,44,normal,Navi,4,35.021,91
+5,male,21,drea,54290 Trier,11,85.056,51
+5,male,21,drea,Auto,4,37.504,25
+5,male,21,drea,WDR 4,5,43.934,33
+5,male,21,drea,Radio,5,37.134,37
+5,male,21,drea,02262 Wiehl,11,57.232,81
+5,male,21,drea,57462 Olpe,10,47.129,53
+5,male,21,drea,Tanken,6,44.434,50
+5,male,21,drea,Eminem,6,38.56,53
+5,male,21,drea,SWR3,4,21.854,29
+5,male,21,drea,Musik,5,22.793,32
+5,male,21,drea,51063 Koeln,11,51.057,69
+5,male,21,drea,Strasse,7,30.987,50
+5,male,21,drea,RPR1,4,19.668,21
+5,male,21,drea,51674 Wiehl,11,47.008,81
+5,male,21,drea,Italien,7,40.804,49
+5,male,21,drea,53119 Bonn,10,73.257,100
+5,male,21,drea,Max Muster,10,50.663,70
+5,male,21,drea,Navi,4,19.949,33
+5,male,21,drea,Jane Doe,8,39.82,49
+5,male,21,normal,Radio,5,27.591,86
+5,male,21,normal,Jane Doe,8,71.947,151
+5,male,21,normal,Italien,7,45.852,106
+5,male,21,normal,WDR 4,5,24.659,68
+5,male,21,normal,51063 Koeln,11,34.805,96
+5,male,21,normal,Strasse,7,33.71,98
+5,male,21,normal,53119 Bonn,10,54.386,87
+5,male,21,normal,SWR3,4,26.982,41
+5,male,21,normal,Max Muster,10,54.503,123
+5,male,21,normal,Musik,5,45.98,72
+5,male,21,normal,Auto,4,36.754,69
+5,male,21,normal,RPR1,4,18.313,33
+5,male,21,normal,Tanken,6,30.127,81
+5,male,21,normal,Eminem,6,37.837,89
+5,male,21,normal,57462 Olpe,10,46.737,83
+5,male,21,normal,54290 Trier,11,41.645,100
+5,male,21,normal,02262 Wiehl,11,50.688,108
+5,male,21,normal,51674 Wiehl,11,42.137,82
+5,male,21,normal,Navi,4,30.925,93
+6,female,21,drea,Navi,4,50.867,39
+6,female,21,drea,54290 Trier,11,66.291,53
+6,female,21,drea,Italien,7,58.813,52
+6,female,21,drea,51063 Koeln,11,64.959,71
+6,female,21,drea,Eminem,6,48.435,61
+6,female,21,drea,Auto,4,27.152,36
+6,female,21,drea,02262 Wiehl,11,63.7,78
+6,female,21,drea,WDR 4,5,67.117,66
+6,female,21,drea,51674 Wiehl,11,69.249,86
+6,female,21,drea,Radio,5,30.569,46
+6,female,21,drea,57462 Olpe,10,53.708,59
+6,female,21,drea,RPR1,4,34.139,39
+6,female,21,drea,53119 Bonn,10,49.22,48
+6,female,21,drea,Max Muster,10,55.056,78
+6,female,21,drea,Jane Doe,8,43.179,42
+6,female,21,drea,Strasse,7,32.407,43
+6,female,21,drea,Tanken,6,38.395,40
+6,female,21,drea,SWR3,4,22.905,28
+6,female,21,drea,Musik,5,26.704,26
+6,female,21,normal,Radio,5,28.883,80
+6,female,21,normal,02262 Wiehl,11,77.979,146
+6,female,21,normal,51674 Wiehl,11,74.561,134
+6,female,21,normal,Tanken,6,33.852,87
+6,female,21,normal,53119 Bonn,10,46.009,105
+6,female,21,normal,Italien,7,37.994,120
+6,female,21,normal,SWR3,4,31.389,63
+6,female,21,normal,Auto,4,23.586,63
+6,female,21,normal,Strasse,7,35.258,96
+6,female,21,normal,57462 Olpe,10,46.098,97
+6,female,21,normal,Navi,4,32.144,93
+6,female,21,normal,RPR1,4,19.782,47
+6,female,21,normal,Jane Doe,8,49.147,153
+6,female,21,normal,51063 Koeln,11,49.304,112
+6,female,21,normal,54290 Trier,11,66.893,106
+6,female,21,normal,Max Muster,10,72.264,141
+6,female,21,normal,Eminem,6,29.669,79
+6,female,21,normal,WDR 4,5,31.363,76
+6,female,21,normal,Musik,5,30.837,64
+7,male,51,drea,51674 Wiehl,11,155.762,156
+7,male,51,drea,Navi,4,63.503,59
+7,male,51,drea,51063 Koeln,11,178.331,208
+7,male,51,drea,Jane Doe,8,93.021,88
+7,male,51,drea,54290 Trier,11,101.895,102
+7,male,51,drea,Eminem,6,62.262,76
+7,male,51,drea,Musik,5,74.818,154
+7,male,51,drea,Tanken,6,98.802,137
+7,male,51,drea,53119 Bonn,10,93.292,157
+7,male,51,drea,Italien,7,83.566,117
+7,male,51,drea,02262 Wiehl,11,103.843,138
+7,male,51,drea,SWR3,4,44.269,52
+7,male,51,drea,WDR 4,5,52.831,59
+7,male,51,drea,Max Muster,10,85.274,93
+7,male,51,drea,Auto,4,57.288,78
+7,male,51,drea,Strasse,7,71.523,83
+7,male,51,drea,RPR1,4,38.658,47
+7,male,51,drea,57462 Olpe,10,66.786,67
+7,male,51,drea,Radio,5,42.038,53
+7,male,51,normal,Jane Doe,8,76.935,179
+7,male,51,normal,Max Muster,10,46.804,137
+7,male,51,normal,Strasse,7,48.585,114
+7,male,51,normal,57462 Olpe,10,50.507,87
+7,male,51,normal,54290 Trier,11,53.116,88
+7,male,51,normal,Eminem,6,28.615,85
+7,male,51,normal,53119 Bonn,10,48.683,95
+7,male,51,normal,Navi,4,29.207,89
+7,male,51,normal,RPR1,4,16.411,31
+7,male,51,normal,Tanken,6,44.646,95
+7,male,51,normal,WDR 4,5,29.724,74
+7,male,51,normal,Italien,7,38.498,106
+7,male,51,normal,Auto,4,26.65,81
+7,male,51,normal,02262 Wiehl,11,54.389,92
+7,male,51,normal,Musik,5,36.342,78
+7,male,51,normal,Radio,5,29.158,70
+7,male,51,normal,51063 Koeln,11,53.634,102
+7,male,51,normal,SWR3,4,27.813,49
+7,male,51,normal,51674 Wiehl,11,78.987,100
+8,female,51,drea,Navi,4,72.616,26
+8,female,51,drea,WDR 4,5,67.282,44
+8,female,51,drea,51063 Koeln,11,107.602,81
+8,female,51,drea,Italien,7,86.616,59
+8,female,51,drea,Eminem,6,77.852,69
+8,female,51,drea,Auto,4,48.637,50
+8,female,51,drea,SWR3,4,98.701,88
+8,female,51,drea,53119 Bonn,10,82.794,71
+8,female,51,drea,Tanken,6,65.552,58
+8,female,51,drea,Musik,5,51.637,51
+8,female,51,drea,02262 Wiehl,11,78.471,89
+8,female,51,drea,51674 Wiehl,11,111.736,96
+8,female,51,drea,Jane Doe,8,120.964,73
+8,female,51,drea,Radio,5,42.071,43
+8,female,51,drea,RPR1,4,37.627,28
+8,female,51,drea,Max Muster,10,75.316,68
+8,female,51,drea,54290 Trier,11,90.809,74
+8,female,51,drea,57462 Olpe,10,76.128,73
+8,female,51,drea,Strasse,7,66.067,62
+8,female,51,normal,51674 Wiehl,11,85.804,94
+8,female,51,normal,Tanken,6,68.973,93
+8,female,51,normal,Navi,4,49.495,111
+8,female,51,normal,WDR 4,5,85.017,98
+8,female,51,normal,Italien,7,92.647,144
+8,female,51,normal,Jane Doe,8,80.936,171
+8,female,51,normal,54290 Trier,11,80.377,86
+8,female,51,normal,53119 Bonn,10,49.286,83
+8,female,51,normal,Max Muster,10,55.512,131
+8,female,51,normal,Eminem,6,41.474,81
+8,female,51,normal,51063 Koeln,11,83.371,150
+8,female,51,normal,57462 Olpe,10,53.8,85
+8,female,51,normal,Strasse,7,53.413,104
+8,female,51,normal,Auto,4,45.823,69
+8,female,51,normal,02262 Wiehl,11,65.022,98
+8,female,51,normal,SWR3,4,29.28,53
+8,female,51,normal,Radio,5,30.712,60
+8,female,51,normal,Musik,5,36.023,68
+8,female,51,normal,RPR1,4,28.479,37
+9,male,14,drea,Eminem,6,43.086,52
+9,male,14,drea,Jane Doe,8,52.602,51
+9,male,14,drea,51063 Koeln,11,76.937,98
+9,male,14,drea,02262 Wiehl,11,65.984,85
+9,male,14,drea,Strasse,7,42.17,46
+9,male,14,drea,54290 Trier,11,57.544,50
+9,male,14,drea,Navi,4,35.37,36
+9,male,14,drea,Max Muster,10,52.663,55
+9,male,14,drea,51674 Wiehl,11,53.905,76
+9,male,14,drea,Italien,7,41.496,49
+9,male,14,drea,Radio,5,29.461,49
+9,male,14,drea,Tanken,6,36.632,48
+9,male,14,drea,SWR3,4,23.456,30
+9,male,14,drea,57462 Olpe,10,53.519,59
+9,male,14,drea,53119 Bonn,10,51.844,59
+9,male,14,drea,WDR 4,5,33.428,40
+9,male,14,drea,RPR1,4,21.498,23
+9,male,14,drea,Musik,5,32.056,50
+9,male,14,drea,Auto,4,32.752,37
+9,male,14,normal,54290 Trier,11,94.531,116
+9,male,14,normal,WDR 4,5,43.122,70
+9,male,14,normal,Tanken,6,62.262,121
+9,male,14,normal,Radio,5,35.285,76
+9,male,14,normal,Eminem,6,57.968,77
+9,male,14,normal,Jane Doe,8,69.674,139
+9,male,14,normal,51674 Wiehl,11,83.947,96
+9,male,14,normal,57462 Olpe,10,46.031,89
+9,male,14,normal,51063 Koeln,11,77.323,114
+9,male,14,normal,Auto,4,31.593,85
+9,male,14,normal,Italien,7,43.345,116
+9,male,14,normal,Musik,5,32.584,68
+9,male,14,normal,Max Muster,10,85.691,161
+9,male,14,normal,53119 Bonn,10,52.104,91
+9,male,14,normal,RPR1,4,16.971,31
+9,male,14,normal,Strasse,7,38.672,100
+9,male,14,normal,02262 Wiehl,11,47.321,92
+9,male,14,normal,Navi,4,27.18,91
+9,male,14,normal,SWR3,4,22.064,55
+10,male,23,drea,Max Muster,10,147.223,88
+10,male,23,drea,Musik,5,96.487,73
+10,male,23,drea,51063 Koeln,11,130.721,147
+10,male,23,drea,Eminem,6,87.39,55
+10,male,23,drea,54290 Trier,11,85.165,68
+10,male,23,drea,53119 Bonn,10,49.274,44
+10,male,23,drea,Strasse,7,44.417,37
+10,male,23,drea,Auto,4,31.224,25
+10,male,23,drea,02262 Wiehl,11,86.469,74
+10,male,23,drea,Italien,7,59.471,47
+10,male,23,drea,51674 Wiehl,11,88.893,92
+10,male,23,drea,SWR3,4,37.681,39
+10,male,23,drea,Tanken,6,56.445,52
+10,male,23,drea,RPR1,4,41.79,28
+10,male,23,drea,Navi,4,44.64,40
+10,male,23,drea,Jane Doe,8,62.279,50
+10,male,23,drea,Radio,5,47.662,50
+10,male,23,drea,WDR 4,5,48.335,52
+10,male,23,drea,57462 Olpe,10,64.008,65
+10,male,23,normal,51674 Wiehl,11,53.203,88
+10,male,23,normal,Musik,5,41.222,80
+10,male,23,normal,Tanken,6,37.394,87
+10,male,23,normal,Max Muster,10,60.182,149
+10,male,23,normal,53119 Bonn,10,37.305,91
+10,male,23,normal,Navi,4,29.243,85
+10,male,23,normal,SWR3,4,25.814,65
+10,male,23,normal,Eminem,6,27.215,77
+10,male,23,normal,Strasse,7,32.086,100
+10,male,23,normal,Radio,5,30.663,72
+10,male,23,normal,57462 Olpe,10,39.399,83
+10,male,23,normal,54290 Trier,11,54.468,106
+10,male,23,normal,WDR 4,5,21.004,62
+10,male,23,normal,51063 Koeln,11,45.099,116
+10,male,23,normal,Italien,7,38.127,106
+10,male,23,normal,02262 Wiehl,11,47.265,92
+10,male,23,normal,Auto,4,31.312,81
+10,male,23,normal,RPR1,4,23.142,37
+10,male,23,normal,Jane Doe,8,53.79,137
+11,female,23,drea,02262 Wiehl,11,139.844,102
+11,female,23,drea,WDR 4,5,48.813,42
+11,female,23,drea,Navi,4,42.456,34
+11,female,23,drea,51063 Koeln,11,81.332,84
+11,female,23,drea,Max Muster,10,74.641,91
+11,female,23,drea,Eminem,6,49.127,54
+11,female,23,drea,RPR1,4,29.22,41
+11,female,23,drea,51674 Wiehl,11,63.093,90
+11,female,23,drea,Italien,7,52.485,52
+11,female,23,drea,SWR3,4,44.343,54
+11,female,23,drea,Strasse,7,38.525,51
+11,female,23,drea,Jane Doe,8,60.948,63
+11,female,23,drea,57462 Olpe,10,75.779,81
+11,female,23,drea,Auto,4,43.512,60
+11,female,23,drea,Musik,5,44.872,70
+11,female,23,drea,53119 Bonn,10,55.859,55
+11,female,23,drea,Tanken,6,46.822,42
+11,female,23,drea,54290 Trier,11,56.353,64
+11,female,23,drea,Radio,5,44.304,61
+11,female,23,normal,53119 Bonn,10,66.851,129
+11,female,23,normal,51063 Koeln,11,79.585,150
+11,female,23,normal,WDR 4,5,39.6,116
+11,female,23,normal,Navi,4,42.302,119
+11,female,23,normal,Eminem,6,46.13,87
+11,female,23,normal,Radio,5,32.412,66
+11,female,23,normal,57462 Olpe,10,52.475,133
+11,female,23,normal,02262 Wiehl,11,64.312,122
+11,female,23,normal,54290 Trier,11,83.984,160
+11,female,23,normal,Strasse,7,44.974,114
+11,female,23,normal,Max Muster,10,67.387,145
+11,female,23,normal,Jane Doe,8,54.527,161
+11,female,23,normal,51674 Wiehl,11,61.385,90
+11,female,23,normal,Italien,7,40.682,114
+11,female,23,normal,SWR3,4,19.946,43
+11,female,23,normal,RPR1,4,26.747,51
+11,female,23,normal,Tanken,6,51.103,137
+11,female,23,normal,Auto,4,25.026,67
+11,female,23,normal,Musik,5,29.254,74
+12,male,52,drea,Navi,4,102.441,79
+12,male,52,drea,Strasse,7,65.12,87
+12,male,52,drea,Eminem,6,66.113,122
+12,male,52,drea,53119 Bonn,10,66.674,99
+12,male,52,drea,Tanken,6,92.675,157
+12,male,52,drea,57462 Olpe,10,128.839,163
+12,male,52,drea,02262 Wiehl,11,126.469,156
+12,male,52,drea,RPR1,4,40.715,30
+12,male,52,drea,SWR3,4,63.883,55
+12,male,52,drea,Radio,5,37.424,47
+12,male,52,drea,51063 Koeln,11,114.389,116
+12,male,52,drea,51674 Wiehl,11,94.906,96
+12,male,52,drea,54290 Trier,11,111.07,130
+12,male,52,drea,Italien,7,54.103,56
+12,male,52,drea,Max Muster,10,103.666,138
+12,male,52,drea,WDR 4,5,44.947,64
+12,male,52,drea,Musik,5,46.875,67
+12,male,52,drea,Auto,4,46.46,75
+12,male,52,drea,Jane Doe,8,73.428,116
+12,male,52,normal,57462 Olpe,10,76.987,105
+12,male,52,normal,54290 Trier,11,114.024,158
+12,male,52,normal,51674 Wiehl,11,91.656,134
+12,male,52,normal,Italien,7,73.118,108
+12,male,52,normal,Navi,4,32.388,91
+12,male,52,normal,Jane Doe,8,59.427,143
+12,male,52,normal,Strasse,7,78.283,112
+12,male,52,normal,Eminem,6,39.909,99
+12,male,52,normal,SWR3,4,28.773,55
+12,male,52,normal,RPR1,4,32.414,39
+12,male,52,normal,51063 Koeln,11,65.291,142
+12,male,52,normal,Auto,4,33.761,61
+12,male,52,normal,02262 Wiehl,11,52.813,96
+12,male,52,normal,Tanken,6,56.007,93
+12,male,52,normal,53119 Bonn,10,49.265,119
+12,male,52,normal,WDR 4,5,50.021,108
+12,male,52,normal,Max Muster,10,83.244,143
+12,male,52,normal,Radio,5,38.257,64
+12,male,52,normal,Musik,5,37.109,82
